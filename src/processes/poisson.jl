@@ -16,9 +16,9 @@ struct PoissonProcess{T<:Union{Real,Intensity},G<:Geometry} <: PointProcess
 	geom::G
 end
 
-function (ig::IntensityGrid)(ξ)
-	ξ ∈ g || error("point is not in domain of intensity grid.")
-	return findfirst(ξ in g for g in ig.grid)
+function (grid::IntensityGrid)(ξ)
+	ξ ∈ grid.grid || error("point is not in domain of intensity grid.")
+	return findfirst(ξ in g for g in grid.grid)
 end
 Intensity(ρ::IntensityGrid) = Intensity(ρ, maximum(ρ))
 Intensity(ρ::Function, mesh::Mesh) = maximum(ρ(centroid(m)) for m in mesh)
