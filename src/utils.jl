@@ -1,4 +1,4 @@
-function boundinggrid(geom::Geometry,grid_res)
+function boundinggrid(geom::Geometry{D,T},grid_res::NTuple{D,T}=ntuple(d->1000, Val{D}())) where {D,T}
     box = boundingbox(geom)
     return CartesianGrid(box.min,box.max,dims=grid_res)
 end
