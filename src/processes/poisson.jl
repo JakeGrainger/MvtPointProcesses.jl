@@ -21,14 +21,14 @@ Intensity(ρ::Function, mesh::Mesh) = maximum(ρ(centroid(m)) for m in mesh)
 
 Base.maximum(g::IntensityGrid) = Base.maximum(g.ρ)
 
-function Base.rand(p::PoissonProcess{Real,Geometry})
+function simulate(p::PoissonProcess{Real,Geometry})
 	grid = boundinggrid(p.geom)
 	N = rand(Poisson(p.ρ * measure(grid)))
 	X = PointSet(collect(sample(grid, HomogeneousSampling(N))))
 	return mask(X,p.geom)
 end
 
-function Base.rand(p::PoissonProcess{Intensity,Geometry})
+function simulate(p::PoissonProcess{Intensity,Geometry})
 	X = Base.rand(PoissonProcess(p.ρ.ρ₀, p.geom))
 	thin(X, ξ->p.ρ(ξ)/p.ρ₀)
 end
