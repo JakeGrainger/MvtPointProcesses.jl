@@ -18,7 +18,7 @@ end
 
 function (grid::IntensityGrid)(ξ)
 	ξ ∈ grid.grid || error("point is not in domain of intensity grid.")
-	return findfirst(ξ in g for g in grid.grid)
+	return findfirst(ξ in g[i] for i in 1:length(grid.grid))
 end
 Intensity(ρ::IntensityGrid) = Intensity(ρ, maximum(ρ))
 Intensity(ρ::Function, mesh::Mesh) = maximum(ρ(centroid(m)) for m in mesh)
