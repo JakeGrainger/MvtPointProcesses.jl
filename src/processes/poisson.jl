@@ -1,5 +1,5 @@
 struct IntensityGrid{D,T1,T2}
-	ρ::Array{D,T1}
+	ρ::Array{T1,D}
 	grid::CartesianGrid{D,T2}
 end
 struct Intensity{T<:Real,F<:Union{Function,IntensityGrid}}
