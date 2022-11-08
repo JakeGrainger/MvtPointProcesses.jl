@@ -1,28 +1,33 @@
-abstract type PoissonProcess <: PointProcess end
-
-struct HomogeneousPoissonProcess{T<:Real} <: PoissonProcess
+struct PoissonProcess{T<:Union{Real,Intensity},G<:Geometry} <: PointProcess
 	ρ::T
+	geom::G
 end
 
-struct InHomogeneousPoissonProcess{T<:Real,F<:Function} <: PoissonProcess
-	ρ₀::T
+struct IntensityGrid{D,T1,T2}
+	ρ::Array{D,T1}
+	grid::CartesianGrid{D,T2}
+end
+function (ig::IntensityGrid)(ξ)
+	ξ ∈ g || error("point is not in domain of intensity grid.")
+	return findfirst(ξ in g for g in ig.grid)
+end
+struct Intensity{T<:Real,F<:Union{Function,IntensityGrid}}
 	ρ::F
+	ρ₀::T
+end
+Intensity(ρ::IntensityGrid) = Intensity(ρ, maximum(ρ))
+Intensity(ρ::Function, mesh::Mesh) = maximum(ρ(centroid(m)) for m in mesh)
+
+Base.maximum(g::IntensityGrid) = Base.maximum(g.ρ)
+
+function Base.rand(p::PoissonProcess{Real,Geometry})
+	grid = boundinggrid(p.geom)
+	N = rand(Poisson(p.ρ * measure(grid)))
+	X = PointSet(collect(sample(grid, HomogeneousSampling(N))))
+	return mask(X,p.geom)
 end
 
-function simulate(p::HomogeneousPoissonProcess,B::Box)
-	N = rand(Poisson(p.ρ * prod(B.a)))
-	dist = Uniform.(0,B.a)
-	points = [rand.(dist) for i in 1:N]
-	return points
-end
-
-function simulate(p::InHomogeneousPoissonProcess,B::Box)
-	points = simulate(HomogeneousPoissonProcess(p.ρ₀),B)
-	thinned = eltype(points)[]
-	for ξ ∈ points
-		if rand() ≤ p.ρ(ξ)/p.ρ₀
-			push!(thinned, ξ)
-		end
-	end
-	return thinned
+function Base.rand(p::PoissonProcess{Intensity,Geometry})
+	X = Base.rand(PoissonProcess(p.ρ.ρ₀, p.geom))
+	thin(X, ξ->p.ρ(ξ)/p.ρ₀)
 end
