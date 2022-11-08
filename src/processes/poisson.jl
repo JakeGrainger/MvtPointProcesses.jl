@@ -32,7 +32,7 @@ Base.maximum(g::IntensityGrid) = Base.maximum(g.ρ)
 function rand(p::PoissonProcess{<:Real,<:Geometry{D,T}}) where {D,T}
 	grid = boundinggrid(p.geom)
 	N = rand(Poisson(p.ρ * measure(grid)))
-	U = ntuple(d-> Uniform(minimum(grid)[d], maximum(grid)[d]), Val{D}())
+	U = ntuple(d-> Uniform(minimum(grid).coords[d], maximum(grid).coords[d]), Val{D}())
 	X = PointSet([Point(rand.(U)) for _ in 1:N])
 	return mask(X,p.geom)
 end
