@@ -18,7 +18,11 @@ end
 
 function (g::IntensityGrid)(ξ)
 	ξ ∈ g.grid || error("point is not in domain of intensity grid.")
-	return findfirst(ξ in g.grid[i] for i in 1:length(g.grid))
+	gmin = minimum(g.grid).coords
+    gΔ = g.grid.spacing
+    gn = g.grid.dims
+    ind = CartesianIndex(ntuple(d->min(floor(Int, (ξ.coords[d]-gmin[d])/gΔ[d])+1, gn[d]), Val{D}()))
+    return g.ρ[ind]
 end
 Intensity(ρ::IntensityGrid) = Intensity(ρ, maximum(ρ))
 Intensity(ρ::Function, mesh::Mesh) = maximum(ρ(centroid(m)) for m in mesh)
