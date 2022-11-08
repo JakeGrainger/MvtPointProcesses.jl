@@ -1,19 +1,20 @@
+struct IntensityGrid{D,T1,T2}
+	ρ::Array{D,T1}
+	grid::CartesianGrid{D,T2}
+end
+struct Intensity{T<:Real,F<:Union{Function,IntensityGrid}}
+	ρ::F
+	ρ₀::T
+end
+
 struct PoissonProcess{T<:Union{Real,Intensity},G<:Geometry} <: PointProcess
 	ρ::T
 	geom::G
 end
 
-struct IntensityGrid{D,T1,T2}
-	ρ::Array{D,T1}
-	grid::CartesianGrid{D,T2}
-end
 function (ig::IntensityGrid)(ξ)
 	ξ ∈ g || error("point is not in domain of intensity grid.")
 	return findfirst(ξ in g for g in ig.grid)
-end
-struct Intensity{T<:Real,F<:Union{Function,IntensityGrid}}
-	ρ::F
-	ρ₀::T
 end
 Intensity(ρ::IntensityGrid) = Intensity(ρ, maximum(ρ))
 Intensity(ρ::Function, mesh::Mesh) = maximum(ρ(centroid(m)) for m in mesh)
