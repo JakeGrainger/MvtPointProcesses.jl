@@ -1,4 +1,4 @@
-function boundinggrid(geom::Geometry)
+function boundinggrid(geom::Geometry,grid_res)
     box = boundingbox(geom)
     return CartesianGrid(box.min,box.max,dims=grid_res)
 end
