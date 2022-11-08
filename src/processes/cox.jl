@@ -27,7 +27,14 @@ end
 CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res::Int) = CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res = ntuple(d->grid_res,Val{D}())) where {D}
 
 function Base.rand(c::CoxProcess)
-    intensity = c.link(rand(c.Λ)) # generate intensity field
-    X = rand.(PoissonProcess.(indensity)) # generate inhomogeneous Poisson processes
-    return (X=X,intensity=intensity)
+    intensity = rand(c.Λ) # generate intensity field
+    return _cox_rand(intensity, c)
+end
+
+_cox_rand(intensity::Array{SVector{P,T},D}, c::CoxProcess) where {P,D,T} = _cox_rand(ntuple(p->getindex.(intensity,p), Val{P}()), c)
+_cox_rand(intensity::NTuple{P,Array{T,D}}, c::CoxProcess) where {P,D,T} = _cox_rand.(intensity, Ref(c))
+function _cox_rand(intensity::Array{T,D}, c::CoxProcess) where {D,T}
+    transformed_intensity = c.link.(intensity)
+    X = rand(PoissonProcess(transformed_intensity, c.geom)) # generate inhomogeneous Poisson processes
+    return (X=X,intensity=transformed_intensity)
 end
