@@ -29,10 +29,11 @@ Intensity(ρ::Function, mesh::Mesh) = maximum(ρ(centroid(m)) for m in mesh)
 
 Base.maximum(g::IntensityGrid) = Base.maximum(g.ρ)
 
-function rand(p::PoissonProcess{<:Real,<:Geometry})
+function rand(p::PoissonProcess{<:Real,<:Geometry{D,T}}) where {D,T}
 	grid = boundinggrid(p.geom)
 	N = rand(Poisson(p.ρ * measure(grid)))
-	X = PointSet(collect(sample(grid, HomogeneousSampling(N))))
+	U = ntuple(d-> Uniform(minimum(grid)[d], maximum(grid)[d]), Val{D}())
+	X = PointSet([Point(rand.(U)) for _ in 1:N])
 	return mask(X,p.geom)
 end
 
