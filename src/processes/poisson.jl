@@ -17,10 +17,10 @@ struct PoissonProcess{T<:Union{Real,Intensity},G<:Geometry} <: PointProcess
 end
 
 function (g::IntensityGrid)(ξ)
-	ξ ∈ g.grid || error("point is not in domain of intensity grid.")
 	gmin = minimum(g.grid).coords
     gΔ = g.grid.spacing
     gn = g.grid.dims
+	all(gmin.≤ ξ.coords .≤gmin.+gΔ.*gn) || error("point is not in domain of intensity grid.")
     ind = CartesianIndex(Tuple(min.(floor.(Int, (ξ.coords.-gmin)./gΔ).+1, gn) ))
     return g.ρ[ind]
 end
