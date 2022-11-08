@@ -21,15 +21,13 @@ Note that `fieldtype` should be a function which produces a random field when pr
 Optionally specify `grid_res` to get a better quality simulation.
 """
 function CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res::NTuple{D,Int}=ntuple(d->1000,val{D}())) where {D}
-    box = boundingbox(geom)
-    grid = CartesianGrid(box.min,box.max,dims=grid_res)
+    grid = boundinggrid(geom)
     CoxProcess(fieldtype(grid), link, geom)
 end
 CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res::Int) = CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res = ntuple(d->grid_res,Val{D}())) where {D}
 
-function rand(c::CoxProcess)
+function Base.rand(c::CoxProcess)
     intensity = c.link(rand(c.Λ)) # generate intensity field
-    X_grid = rand.(PoissonProcess.(indensity)) # generate inhomogeneous Poisson processes
-    X = PointSet([x for x in X_grid if x ∈ c.geom]) # keep only points in the domain
+    X = rand.(PoissonProcess.(indensity)) # generate inhomogeneous Poisson processes
     return (X=X,intensity=intensity)
 end
