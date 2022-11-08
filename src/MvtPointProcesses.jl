@@ -1,6 +1,6 @@
 module MvtPointProcesses
 
-using Distributions, Meshes
+using Distributions, Meshes, StaticArrays
 
 include("processes/processes.jl")
 
