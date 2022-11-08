@@ -5,7 +5,7 @@ Cox process with random intensity field `Λ` and link function `link` over geome
 
 The intensity field should have a method rand which allows for the generation of a random field.
 """
-struct CoxProcess{D,F<:Function,G} <: PointProcess
+struct CoxProcess{D,F<:Function,G<:Geometry} <: PointProcess
     Λ::D
     link::F
     geom::G
@@ -20,11 +20,11 @@ Note that `fieldtype` should be a function which produces a random field when pr
 
 Optionally specify `grid_res` to get a better quality simulation.
 """
-function CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res::NTuple{D,Int}) where {D,T}
+function coxprocess(fieldtype, link, geom::Geometry{D,T}; grid_res::NTuple{D,Int}) where {D,T}
     grid = boundinggrid(geom,grid_res)
     CoxProcess(fieldtype(grid), link, geom)
 end
-CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res::Int=1000) where {D,T} = CoxProcess(fieldtype, link, geom; grid_res = ntuple(d->grid_res,Val{D}()))
+coxprocess(fieldtype, link, geom::Geometry{D,T}; grid_res::Int=1000) where {D,T} = coxprocess(fieldtype, link, geom; grid_res = ntuple(d->grid_res,Val{D}()))
 
 function Base.rand(c::CoxProcess)
     intensity = rand(c.Λ) # generate intensity field

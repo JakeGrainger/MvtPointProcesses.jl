@@ -4,6 +4,6 @@ using Distributions, Meshes, StaticArrays
 
 include("processes/processes.jl")
 
-export rand, PoissonProcess, CoxProcess
+export rand, PoissonProcess, CoxProcess, coxprocess
 
 end
