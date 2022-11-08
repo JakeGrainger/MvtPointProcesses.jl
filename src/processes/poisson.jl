@@ -21,7 +21,7 @@ function (g::IntensityGrid)(ξ)
 	gmin = minimum(g.grid).coords
     gΔ = g.grid.spacing
     gn = g.grid.dims
-    ind = CartesianIndex(ntuple(d->min(floor(Int, (ξ.coords[d]-gmin[d])/gΔ[d])+1, gn[d]), Val{D}()))
+    ind = CartesianIndex(min.(floor.(Int, (ξ.coords.-gmin)./gΔ).+1, gn) )
     return g.ρ[ind]
 end
 Intensity(ρ::IntensityGrid) = Intensity(ρ, maximum(ρ))
