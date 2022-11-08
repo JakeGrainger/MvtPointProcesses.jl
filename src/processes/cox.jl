@@ -20,11 +20,11 @@ Note that `fieldtype` should be a function which produces a random field when pr
 
 Optionally specify `grid_res` to get a better quality simulation.
 """
-function CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res::NTuple{D,Int}=ntuple(d->1000,val{D}())) where {D,T}
+function CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res::NTuple{D,Int}) where {D,T}
     grid = boundinggrid(geom,grid_res)
     CoxProcess(fieldtype(grid), link, geom)
 end
-CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res::Int) = CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res = ntuple(d->grid_res,Val{D}())) where {D}
+CoxProcess(fieldtype, link, geom::Geometry{D,T}; grid_res::Int=1000) where {D,T} = CoxProcess(fieldtype, link, geom; grid_res = ntuple(d->grid_res,Val{D}()))
 
 function Base.rand(c::CoxProcess)
     intensity = rand(c.Λ) # generate intensity field
