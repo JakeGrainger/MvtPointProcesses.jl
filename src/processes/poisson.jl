@@ -1,6 +1,10 @@
 struct IntensityGrid{D,T1,T2}
 	ρ::Array{T1,D}
 	grid::CartesianGrid{D,T2}
+	function IntensityGrid(ρ::Array{T1,D}, grid::CartesianGrid{D,T2}) where {D,T1,T2}
+		@assert size(ρ) == size(grid)
+		new{D,T1,T2}(ρ, grid)
+	end
 end
 struct Intensity{T<:Real,F<:Union{Function,IntensityGrid}}
 	ρ::F
