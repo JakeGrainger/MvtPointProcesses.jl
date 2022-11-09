@@ -9,6 +9,7 @@ Meshes = "eacbb407-ea5a-433e-ab97-5258b1ca43fa"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
+Meshes = "0.25"
 julia = "1.8"
 
 [extras]
