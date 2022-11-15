@@ -44,7 +44,7 @@ function Distributions.mean(c::CoxProcess{D,typeof(exp),G}) where {D,G}
 end
 
 function Distributions.cor(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}   
-    return exp(cov(c, h))
+    return exp(cov(c.Λ.Γ, h))
 end
 
 function Distributions.cov(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}
