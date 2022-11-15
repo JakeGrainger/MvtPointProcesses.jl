@@ -43,10 +43,10 @@ function Distributions.mean(c::CoxProcess{D,typeof(exp),G}) where {D,G}
     return exp(var(c.Λ.Γ))
 end
 
-function Distributions.cov(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}   
+function Distributions.cor(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}   
     return exp(cov(c, h))
 end
 
 function Distributions.cov(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}
-    return mean(c)^2 * corr(c, h)
+    return mean(c)^2 * cor(c, h)
 end
