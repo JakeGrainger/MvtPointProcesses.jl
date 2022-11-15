@@ -38,3 +38,15 @@ function _cox_rand(intensity::Array{T,D}, c::CoxProcess) where {D,T}
     X = rand(PoissonProcess(transformed_intensity, c.geom)) # generate inhomogeneous Poisson processes
     return (X=X,intensity=transformed_intensity)
 end
+
+function Distributions.mean(c::CoxProcess{D,typeof(exp),G}) where {D,G}
+    return exp(var(c.Λ.Γ))
+end
+
+function Distributions.cov(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}   
+    return exp(cov(c, h))
+end
+
+function Distributions.cov(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}
+    return mean(c)^2 * corr(c, h)
+end
