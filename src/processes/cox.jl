@@ -40,7 +40,7 @@ function _cox_rand(intensity::Array{T,D}, c::CoxProcess) where {D,T}
 end
 
 function Distributions.mean(c::CoxProcess{D,typeof(exp),G}) where {D,G}
-    return exp(var(c.Λ.Γ))
+    return exp(var(c.Λ.Γ)/2)
 end
 
 function Distributions.cor(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}   
