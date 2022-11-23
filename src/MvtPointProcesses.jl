@@ -1,6 +1,6 @@
 module MvtPointProcesses
 
-using Distributions, Meshes, StaticArrays
+using Distributions, Meshes, StaticArrays, CirculantEmbedding
 import Base: rand
 
 include("utils.jl")

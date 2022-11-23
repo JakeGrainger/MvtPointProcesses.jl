@@ -4,6 +4,7 @@ authors = ["Jake Grainger"]
 version = "0.1.0"
 
 [deps]
+CirculantEmbedding = "6450ef71-fe03-48a6-8fe3-d8c8a50f9532"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 Meshes = "eacbb407-ea5a-433e-ab97-5258b1ca43fa"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
