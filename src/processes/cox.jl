@@ -50,3 +50,9 @@ end
 function Distributions.cov(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}
     return mean(c)^2 * cor(c, h)
 end
+
+function approximate_cov(c::CoxProcess{D,typeof(exp),G}, lags)
+    cov_field = approx_cov(c.Λ.Γ, lags)
+    pp_mean = exp(cov_field[1]/2)
+    return pp_mean^2 .* exp.(cov_field)
+end
