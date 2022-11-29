@@ -19,7 +19,7 @@ end
 function (g::IntensityGrid)(ξ)
 	gmin = minimum(g.grid).coords
     gΔ = g.grid.spacing
-    gn = g.grid.dims
+    gn = g.grid.topology.dims
 	all(gmin.≤ ξ.coords .≤gmin.+gΔ.*gn) || error("point is not in domain of intensity grid.")
     ind = CartesianIndex(Tuple(min.(floor.(Int, (ξ.coords.-gmin)./gΔ).+1, gn) ))
     return g.ρ[ind]
