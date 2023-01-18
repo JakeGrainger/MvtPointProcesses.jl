@@ -18,3 +18,7 @@ function rand(p::ThomasProcess)
     end
     return mask(PointSet(offspring), p.geom)
 end
+
+function sdf(p::ThomasProcess{T1, Geometry{2,T2}},k) where {T1,T2}
+    return p.λ*p.μ * (1+p.μ*exp(-p.σ^2* (2π)^2*norm(k.coords)^2))
+end
