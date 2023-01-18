@@ -42,5 +42,5 @@ function rand(p::PoissonProcess{<:Intensity,<:Geometry})
 	thin(X, ξ->p.ρ.ρ(ξ)/p.ρ.ρ₀)
 end
 
-sdf(p::PoissonProcess{Real,Geometry},k) = p.λ
-sdf(p::PoissonProcess{Intensity,Geometry},k) = error("Process is not stationary, so sdf not defined.")
+sdf(p::PoissonProcess{Real,Geometry},freq) = p.λ
+sdf(p::PoissonProcess{Intensity,Geometry},freq) = error("Process is not stationary, so sdf not defined.")
