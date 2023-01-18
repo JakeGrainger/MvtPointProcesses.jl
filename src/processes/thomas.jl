@@ -8,7 +8,7 @@ end
 function rand(p::ThomasProcess)
     containing_box = boundingbox(p.geom)
     simulation_box = expandbox(containing_box,6p.σ)
-    parents = rand(Poisson(p.κ, simulation_box))
+    parents = rand(PoissonProcess(p.κ, simulation_box))
     offspring = eltype(parents)[]
     for par ∈ parents
         n = rand(Poisson(p.μ))
