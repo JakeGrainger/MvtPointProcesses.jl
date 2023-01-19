@@ -11,12 +11,12 @@ function mask(X::PointSet,geom::Geometry)
     return PointSet([x for x ∈ X if x ∈ geom])
 end
 
-function thin(X, retention_probability)
+function thin(X::PointSet, retention_probability)
 	thinned = eltype(X)[]
 	for ξ ∈ X
 		if rand() ≤ retention_probability(ξ)
 			push!(thinned, ξ)
 		end
 	end
-	return thinned
+	return PointSet(thinned)
 end
