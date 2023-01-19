@@ -12,5 +12,5 @@ function rand(model::MaternIProcess)
             push!(X,p)
         end
     end
-    return mask(PointSet(X),p.geom)
+    return mask(PointSet(X), model.geom)
 end

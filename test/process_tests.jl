@@ -18,9 +18,9 @@ end
 end
 
 @testset "Tests for MaternI" begin
-    test_point_process(MaternI(0.01, 1, test_box()))
+    test_point_process(MaternIProcess(0.01, 1, test_box()))
 end
 
 @testset "Tests for MaternII" begin
-    test_point_process(MaternII(0.01, 1, test_box()))
+    test_point_process(MaternIIProcess(0.01, 1, test_box()))
 end
