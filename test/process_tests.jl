@@ -10,7 +10,7 @@ end
 
 @testset "Tests for Poisson" begin
     test_point_process(PoissonProcess(0.01, test_box()))
-    test_point_process(PoissonProcess(Intensity(x->0.01, 0.02), test_box()))
+    test_point_process(PoissonProcess(MvtPointProcesses.Intensity(x->0.01, 0.02), test_box()))
 end
 
 @testset "Tests for Thomas" begin
