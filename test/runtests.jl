@@ -2,5 +2,5 @@ using MvtPointProcesses
 using Test
 
 @testset "MvtPointProcesses.jl" begin
-    # Write your tests here.
+    include("process_tests.jl")
 end
