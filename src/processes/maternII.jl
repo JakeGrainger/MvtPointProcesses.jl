@@ -9,7 +9,7 @@ function rand(p::MaternIIProcess)
     marks = rand(length(proposals))
     X = eltype(proposals.items)[]
     for (m1,p) in zip(marks,proposals.items) #  note this could be made more efficient
-        if sum(m1 ≤ m2 && norm(p.coords.-q.coords) < r for (m2,q) in zip(marks,proposals.items)) == 1 # one of these is distance to self
+        if sum(m1 ≤ m2 && norm(p.coords.-q.coords) < p.r for (m2,q) in zip(marks,proposals.items)) == 1 # one of these is distance to self
             push!(X,p)
         end
     end
