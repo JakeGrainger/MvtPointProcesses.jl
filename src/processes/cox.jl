@@ -5,8 +5,8 @@ Cox process with random intensity field `Λ` and link function `link` over geome
 
 The intensity field should have a method rand which allows for the generation of a random field.
 """
-struct CoxProcess{D,F<:Function,G<:Geometry} <: PointProcess
-    Λ::D
+struct CoxProcess{D,P,T,S<:RandomField{D,P},F<:Function,G<:Geometry{D,T}} <: PointProcess{D,P}
+    Λ::S
     link::F
     geom::G
 end

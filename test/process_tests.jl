@@ -1,9 +1,11 @@
-function test_point_process(model::MvtPointProcesses.PointProcess)
+function test_point_process(model::MvtPointProcesses.PointProcess{D,P}) where {D,P}
     @testset "Tests for model: $model." begin
         X = rand(model)
-        @test X isa PointSet
+        @test X isa expected_sim_output(model)
     end
 end
+expected_sim_output(::MvtPointProcesses.PointProcess{D,P}) where {D,P} = NTuple{P,<:PointSet}
+expected_sim_output(::MvtPointProcesses.PointProcess{D,1}) where {D} = PointSet
 function test_box()
     return Box(Point(0,0),Point(100,100))
 end
@@ -15,6 +17,7 @@ end
 
 @testset "Tests for Thomas" begin
     test_point_process(ThomasProcess(0.01, 4, 0.05, test_box()))
+    test_point_process(ThomasProcess(0.01, (4,3), (0.05,0.06), test_box()))
 end
 
 @testset "Tests for MaternI" begin

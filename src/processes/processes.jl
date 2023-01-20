@@ -1,4 +1,4 @@
-abstract type PointProcess end
+abstract type PointProcess{D,P} end
 
 include("poisson.jl")
 include("cox.jl")

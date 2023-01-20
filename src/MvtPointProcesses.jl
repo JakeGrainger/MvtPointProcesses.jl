@@ -4,6 +4,7 @@ using Distributions, StaticArrays, CirculantEmbedding, LinearAlgebra
 using Reexport
 @reexport using Meshes
 import Base: rand
+import CirculantEmbedding: RandomField
 
 include("utils.jl")
 include("processes/processes.jl")

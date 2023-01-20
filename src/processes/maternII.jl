@@ -1,4 +1,4 @@
-struct MaternIIProcess{T1<:Real,T2<:Real,G<:Geometry} <: PointProcess
+struct MaternIIProcess{D,T,T1<:Real,T2<:Real,G<:Geometry{D,T}} <: PointProcess{D,1}
 	κ::T1
     r::T2
 	geom::G

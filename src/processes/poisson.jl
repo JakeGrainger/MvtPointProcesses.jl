@@ -11,8 +11,8 @@ struct Intensity{T<:Real,F<:Union{Function,IntensityGrid}}
 	ρ₀::T
 end
 
-struct PoissonProcess{T<:Union{Real,Intensity},G<:Geometry} <: PointProcess
-	ρ::T
+struct PoissonProcess{D,T,S<:Union{Real,Intensity},G<:Geometry{D,T}} <: PointProcess{D,1}
+	ρ::S
 	geom::G
 end
 
@@ -29,7 +29,7 @@ Intensity(ρ::Function, mesh::Mesh) = maximum(ρ(centroid(m)) for m in mesh)
 
 Base.maximum(g::IntensityGrid) = Base.maximum(g.ρ)
 
-function rand(p::PoissonProcess{<:Real,<:Geometry{D,T}}) where {D,T}
+function rand(p::PoissonProcess{D,T,<:Real,<:Geometry{D,T}}) where {D,T}
 	grid = boundingbox(p.geom)
 	N = rand(Poisson(p.ρ * measure(grid)))
 	U = ntuple(d-> Uniform(minimum(grid).coords[d], maximum(grid).coords[d]), Val{D}())
@@ -37,7 +37,7 @@ function rand(p::PoissonProcess{<:Real,<:Geometry{D,T}}) where {D,T}
 	return mask(X,p.geom)
 end
 
-function rand(p::PoissonProcess{<:Intensity,<:Geometry})
+function rand(p::PoissonProcess{D,T,<:Intensity,<:Geometry}) where {D,T}
 	X = Base.rand(PoissonProcess(p.ρ.ρ₀, p.geom))
 	thin(X, ξ->p.ρ.ρ(ξ)/p.ρ.ρ₀)
 end
