@@ -9,6 +9,11 @@ function rand(p::ThomasProcess)
     containing_box = boundingbox(p.geom)
     simulation_box = expandbox(containing_box,6p.σ)
     parents = rand(PoissonProcess(p.κ, simulation_box))
+    offspring = thomas_offspring(p, parents)
+    return mask(offspring, p.geom)
+end
+
+function thomas_offspring(p::ThomasProcess, parents)
     offspring = eltype(parents)[]
     for par ∈ parents
         n = rand(Poisson(p.μ))
@@ -16,7 +21,7 @@ function rand(p::ThomasProcess)
             push!(offspring, Point(rand.(Normal.(par.coords, p.σ))))
         end
     end
-    return mask(PointSet(offspring), p.geom)
+    return PointSet(offspring)
 end
 
 function sdf(p::ThomasProcess{T1, T2, T3, <:Geometry{2,S}},freq) where {T1,T2,T3,S}
