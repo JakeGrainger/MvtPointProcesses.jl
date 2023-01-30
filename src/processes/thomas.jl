@@ -25,6 +25,6 @@ function thomas_offspring(σ::Real, μ::Real, parents)
     return PointSet(offspring)
 end
 
-function sdf(p::ThomasProcess{2,1,T,T1,T2,T3,G},freq) where {T,T1,T2,T3,G}
-    return p.κ*p.μ * (1+p.μ*exp(-p.σ^2* (2π)^2*norm(freq.coords)^2))
+function sdf(p::ThomasProcess{2,1,T,T1,T2,T3,G},freq::Point) where {T,T1,T2,T3,G}
+    return p.κ[1]*p.μ[1] * (1+p.μ[1]*exp(-p.σ[1]^2* (2π)^2*norm(freq.coords)^2))
 end
