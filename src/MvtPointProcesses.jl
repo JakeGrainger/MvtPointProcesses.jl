@@ -9,6 +9,6 @@ import CirculantEmbedding: RandomField
 include("utils.jl")
 include("processes/processes.jl")
 
-export PoissonProcess, CoxProcess, coxprocess, ThomasProcess, MaternIProcess, MaternIIProcess
+export PoissonProcess, CoxProcess, coxprocess, ThomasProcess, MaternIProcess, MaternIIProcess, BivariateHardCore
 
 end

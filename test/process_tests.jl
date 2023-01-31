@@ -27,3 +27,7 @@ end
 @testset "Tests for MaternII" begin
     test_point_process(MaternIIProcess(0.01, 1, test_box()))
 end
+
+@testset "Tests for BivariateHardCore" begin
+    test_point_process(BivariateHardCore(0.01, 0.05, 4, test_box()))
+end
