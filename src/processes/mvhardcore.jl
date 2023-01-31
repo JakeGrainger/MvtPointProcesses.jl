@@ -15,5 +15,5 @@ function rand(m::BivariateHardCoreProcess)
             push!(X2, y)
         end
     end
-    return filter.((X1,PointSet(X2)), Ref(m.geom))
+    return mask.((X1,PointSet(X2)), Ref(m.geom))
 end
