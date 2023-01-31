@@ -29,5 +29,5 @@ end
 end
 
 @testset "Tests for BivariateHardCore" begin
-    test_point_process(BivariateHardCore(0.01, 0.05, 4, test_box()))
+    test_point_process(BivariateHardCoreProcess(0.01, 0.05, 4, test_box()))
 end

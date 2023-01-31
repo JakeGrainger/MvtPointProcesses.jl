@@ -1,11 +1,11 @@
-struct BivariateHardCore{D,T1,T2,T3,S,G<:Geometry{D,S}} <: PointProcess{D,2}
+struct BivariateHardCoreProcess{D,T1,T2,T3,S,G<:Geometry{D,S}} <: PointProcess{D,2}
     rho_r::T1
     rho_c::T2
     r::T3
     geom::G
 end
 
-function rand(m::BivariateHardCore)
+function rand(m::BivariateHardCoreProcess)
     X1 = rand(PoissonProcess(m.rho_r, m.geom))
     Y = rand(PoissonProcess(m.rho_c, m.geom))
     X2 = typeof(Y)[]
