@@ -6,9 +6,10 @@ using Reexport
 import Base: rand
 import CirculantEmbedding: RandomField
 
-include("utils.jl")
 include("processes/processes.jl")
+include("shifting.jl")
+include("utils.jl")
 
-export PoissonProcess, CoxProcess, coxprocess, ThomasProcess, MaternIProcess, MaternIIProcess, BivariateHardCoreProcess
+export PoissonProcess, CoxProcess, coxprocess, ThomasProcess, MaternIProcess, MaternIIProcess, BivariateHardCoreProcess, shift
 
 end

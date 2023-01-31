@@ -23,3 +23,8 @@ function thin(X::PointSet, retention_probability)
 	end
 	return PointSet(thinned)
 end
+
+function expand_geom(p::P,r) where {P<:PointProcess}
+	args = map(name->name==:geom ? expandbox(boundingbox(p.geom), r) : getfield(p, name), fieldnames(P))
+	P(args...)
+end
