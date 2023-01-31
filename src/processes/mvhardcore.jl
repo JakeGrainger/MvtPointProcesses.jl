@@ -15,5 +15,5 @@ function rand(m::BivariateHardCoreProcess)
             push!(X2, y)
         end
     end
-    return (mask(PointSet(X1), m.geom), X1)
+    return (mask(PointSet(X1), m.geom), X2)
 end
