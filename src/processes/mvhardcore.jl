@@ -6,13 +6,14 @@ struct BivariateHardCoreProcess{D,T1,T2,T3,S,G<:Geometry{D,S}} <: PointProcess{D
 end
 
 function rand(m::BivariateHardCoreProcess)
-    X1 = rand(PoissonProcess(m.rho_r, m.geom))
-    Y = rand(PoissonProcess(m.rho_c, m.geom))
+    bigbox = expandbox(boundingbox(model.geom), model.r)
+    X1 = rand(PoissonProcess(m.rho_r, bigbox))
+    Y = rand(PoissonProcess(m.rho_c, bigbox))
     X2 = eltype(Y)[]
     for y in Y.items
         if !any(norm(x.coords .- y.coords) < m.r for x in X1.items)
             push!(X2, y)
         end
     end
-    return (X1,PointSet(X2))
+    return filter.((X1,PointSet(X2)), Ref(model.geom))
 end
