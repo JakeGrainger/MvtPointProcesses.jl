@@ -8,12 +8,12 @@ end
 function rand(m::BivariateHardCoreProcess)
     bigbox = expandbox(boundingbox(m.geom), m.r)
     X1 = rand(PoissonProcess(m.rho_r, bigbox))
-    Y = rand(PoissonProcess(m.rho_c, bigbox))
+    Y = rand(PoissonProcess(m.rho_c, m.geom))
     X2 = eltype(Y)[]
     for y in Y.items
         if !any(norm(x.coords .- y.coords) < m.r for x in X1.items)
             push!(X2, y)
         end
     end
-    return mask.((X1,PointSet(X2)), Ref(m.geom))
+    return (mask(PointSet(X1), m.geom), X1)
 end
