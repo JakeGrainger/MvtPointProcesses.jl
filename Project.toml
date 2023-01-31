@@ -1,7 +1,7 @@
 name = "MvtPointProcesses"
 uuid = "29ad95c7-6704-4d51-8ead-909b792d765b"
 authors = ["Jake Grainger"]
-version = "0.0.13"
+version = "0.0.14"
 
 [deps]
 CirculantEmbedding = "6450ef71-fe03-48a6-8fe3-d8c8a50f9532"
