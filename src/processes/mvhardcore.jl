@@ -8,7 +8,7 @@ end
 function rand(m::BivariateHardCoreProcess)
     X1 = rand(PoissonProcess(m.rho_r, m.geom))
     Y = rand(PoissonProcess(m.rho_c, m.geom))
-    X2 = typeof(Y)[]
+    X2 = eltype(Y)[]
     for y in Y.items
         if !any(norm(x.coords .- y.coords) < m.r for x in X1.items)
             push!(X2, y)
