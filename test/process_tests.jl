@@ -28,10 +28,12 @@ end
     test_point_process(MaternIIProcess(0.01, 1, test_box()))
 end
 
-@testset "Tests for BivariateHardCore" begin
-    test_point_process(BivariateHardCoreProcess(0.01, 0.05, 4, test_box()))
+@testset "Tests for MultivariateHardCore" begin
+    test_point_process(MultivariateHardCoreProcess(0.01, 0.05, 4, test_box()))
+    test_point_process(MultivariateHardCoreProcess(0.01, (0.05,), 4, test_box()))
+    test_point_process(MultivariateHardCoreProcess(0.01, (0.05,0.05), 4, test_box()))
 end
 
 @testset "Tests for shifting" begin
-    test_point_process(shift(BivariateHardCoreProcess(0.01, 0.05, 4, test_box()), ((1.0,0.0), (0.0,2.0))))
+    test_point_process(shift(MultivariateHardCoreProcess(0.01, 0.05, 4, test_box()), ((1.0,0.0), (0.0,2.0))))
 end

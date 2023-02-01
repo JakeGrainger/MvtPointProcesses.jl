@@ -10,6 +10,6 @@ include("processes/processes.jl")
 include("shifting.jl")
 include("utils.jl")
 
-export PoissonProcess, CoxProcess, coxprocess, ThomasProcess, MaternIProcess, MaternIIProcess, BivariateHardCoreProcess, shift
+export PoissonProcess, CoxProcess, coxprocess, ThomasProcess, MaternIProcess, MaternIIProcess, BivariateHardCoreProcess, MultivariateHardCoreProcess, shift
 
 end
