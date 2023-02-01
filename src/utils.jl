@@ -26,5 +26,5 @@ end
 
 function expand_geom(p::P,r) where {P<:PointProcess}
 	args = map(name->name==:geom ? expandbox(boundingbox(p.geom), r) : getfield(p, name), fieldnames(P))
-	P(args...)
+	P.name.wrapper(args...) # gets constructor without type parameters
 end
