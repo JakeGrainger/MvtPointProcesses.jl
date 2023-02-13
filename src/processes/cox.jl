@@ -36,15 +36,15 @@ _cox_rand(intensity::NTuple{P,Array{T,D}}, c::CoxProcess) where {P,D,T} = _cox_r
 function _cox_rand(intensity::Array{T,D}, c::CoxProcess) where {D,T}
     transformed_intensity = Intensity(IntensityGrid(c.link.(intensity), c.Λ.mesh))
     X = rand(PoissonProcess(transformed_intensity, c.geom)) # generate inhomogeneous Poisson processes
-    return (X=X,intensity=transformed_intensity)
+    return (X=X,intensity=transformed_intensity.ρ.ρ)
 end
 
 function Distributions.mean(c::CoxProcess{D,typeof(exp),G}) where {D,G}
-    return exp(var(c.Λ.Γ)/2)
+    return exp(mean(c.Λ) + var(c.Λ)/2)
 end
 
 function Distributions.cor(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}   
-    return exp(cov(c.Λ.Γ, h))
+    return exp(cov(c.Λ, h))
 end
 
 function Distributions.cov(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}
@@ -52,7 +52,7 @@ function Distributions.cov(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}
 end
 
 function approximate_cov(c::CoxProcess{D,typeof(exp),G}, lags) where {D,G}
-    cov_field = approx_cov(c.Λ.Γ, lags)
+    cov_field = approx_cov(c.Λ, lags)
     pp_mean = exp(cov_field[1]/2)
     return pp_mean^2 .* exp.(cov_field), pp_mean
 end
