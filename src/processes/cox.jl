@@ -26,8 +26,8 @@ function coxprocess(fieldtype, link, geom::Geometry{D,T}, grid_res::NTuple{D,Int
 end
 coxprocess(fieldtype, link, geom::Geometry{D,T}, grid_res::Int=1000) where {D,T} = coxprocess(fieldtype, link, geom, ntuple(d->grid_res,Val{D}()))
 
-function rand(c::CoxProcess)
-    intensity = rand(c.Λ) # generate intensity field
+function Base.rand(c::CoxProcess)
+    intensity = Base.rand(c.Λ) # generate intensity field
     return _cox_rand(intensity, c)
 end
 
@@ -35,23 +35,23 @@ _cox_rand(intensity::Array{SVector{P,T},D}, c::CoxProcess) where {P,D,T} = _cox_
 _cox_rand(intensity::NTuple{P,Array{T,D}}, c::CoxProcess) where {P,D,T} = _cox_rand.(intensity, Ref(c))
 function _cox_rand(intensity::Array{T,D}, c::CoxProcess) where {D,T}
     transformed_intensity = Intensity(IntensityGrid(c.link.(intensity), c.Λ.mesh))
-    X = rand(PoissonProcess(transformed_intensity, c.geom)) # generate inhomogeneous Poisson processes
+    X = Base.rand(PoissonProcess(transformed_intensity, c.geom)) # generate inhomogeneous Poisson processes
     return (X=X,intensity=transformed_intensity.ρ.ρ)
 end
 
-function Distributions.mean(c::CoxProcess{D,typeof(exp),G}) where {D,G}
+function Distributions.mean(c::CoxProcess{D,P,T,S,typeof(exp),G}) where {D,P,T,S,G}
     return exp(mean(c.Λ) + var(c.Λ)/2)
 end
 
-function Distributions.cor(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}   
+function Distributions.cor(c::CoxProcess{D,P,T,S,typeof(exp),G}, h) where {D,P,T,S,G}   
     return exp(cov(c.Λ, h))
 end
 
-function Distributions.cov(c::CoxProcess{D,typeof(exp),G}, h) where {D,G}
+function Distributions.cov(c::CoxProcess{D,P,T,S,typeof(exp),G}, h) where {D,P,T,S,G}
     return mean(c)^2 * cor(c, h)
 end
 
-function approximate_cov(c::CoxProcess{D,typeof(exp),G}, lags) where {D,G}
+function approximate_cov(c::CoxProcess{D,P,T,S,typeof(exp),G}, lags) where {D,P,T,S,G}
     cov_field = approx_cov(c.Λ, lags)
     pp_mean = exp(cov_field[1]/2)
     return pp_mean^2 .* exp.(cov_field), pp_mean
