@@ -28,8 +28,16 @@ coxprocess(fieldtype, link, geom::Geometry{D,T}, grid_res::Int=1000) where {D,T}
 
 function Base.rand(c::CoxProcess)
     intensity = Base.rand(c.Λ) # generate intensity field
-    return _cox_rand(intensity, c)
+    return process_fields(_cox_rand(striplatent(intensity), c), getlatent(intensity))
 end
+
+striplatent(x) = x
+striplatent(x::NamedTuple{(:rf,:latent), T}) = x.rf
+getlatent(x) = nothing
+getlatent(x::NamedTuple{(:rf,:latent), T}) = x.latent
+
+process_fields(x, ::Nothing) = x
+process_fields(x, y) = (x..., latent=y)
 
 _cox_rand(intensity::Array{SVector{P,T},D}, c::CoxProcess) where {P,D,T} = _cox_rand(ntuple(p->getindex.(intensity,p), Val{P}()), c)
 _cox_rand(intensity::NTuple{P,Array{T,D}}, c::CoxProcess) where {P,D,T} = _cox_rand.(intensity, Ref(c))
