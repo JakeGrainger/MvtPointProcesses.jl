@@ -42,7 +42,7 @@ process_fields(x, y) = (x..., latent=y)
 _cox_rand(intensity::Array{SVector{P,T},D}, c::CoxProcess) where {P,D,T} = _cox_rand(ntuple(p->getindex.(intensity,p), Val{P}()), c)
 _cox_rand(intensity::NTuple{P,Array{T,D}}, c::CoxProcess) where {P,D,T} = _cox_rand.(intensity, Ref(c))
 function _cox_rand(intensity::Array{T,D}, c::CoxProcess) where {D,T}
-    transformed_intensity = Intensity(IntensityGrid(c.link.(intensity), c.Λ.mesh))
+    transformed_intensity = Intensity(IntensityGrid(c.link.(intensity), getmesh(c.Λ)))
     X = Base.rand(PoissonProcess(transformed_intensity, c.geom)) # generate inhomogeneous Poisson processes
     return (X=X,intensity=transformed_intensity.ρ.ρ)
 end
