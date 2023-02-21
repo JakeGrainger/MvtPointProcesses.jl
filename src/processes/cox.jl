@@ -37,7 +37,7 @@ getlatent(x) = nothing
 getlatent(x::NamedTuple{(:rf,:latent), T}) where {T} = x.latent
 
 process_fields(x, y, c) = (points=x, intensity=c.link.(y))
-process_fields(x, y::NamedTuple{(:rf,:latent), T}, c) = (points=x, intensity=c.link(y.rf), latent=y.latent)
+process_fields(x, y::NamedTuple{(:rf,:latent), T}, c) where {T} = (points=x, intensity=c.link(y.rf), latent=y.latent)
 
 _cox_rand(intensity::Array{SVector{P,T},D}, c::CoxProcess) where {P,D,T} = _cox_rand(ntuple(p->getindex.(intensity,p), Val{P}()), c)
 _cox_rand(intensity::NTuple{P,Array{T,D}}, c::CoxProcess) where {P,D,T} = _cox_rand.(intensity, Ref(c))
