@@ -37,3 +37,12 @@ end
 @testset "Tests for shifting" begin
     test_point_process(shift(MultivariateHardCoreProcess(0.01, 0.05, 4, test_box()), ((1.0,0.0), (0.0,2.0))))
 end
+
+@testset "Tests for cox process" begin
+    gp(grid) = IndependentFields(ntuple(d->GaussianProcess(0.0, Matern(1., 1, 2, 2), grid, pad=2), Val{2}()))
+    gp_tf(grid) = FilteredRandomField(IndependentFields(ntuple(d->GaussianProcess(0.0, Matern(1., 1, 2, 2), grid, pad=2), Val{2}())), LagZeroFilter(SMatrix{2,2,Float64,4}(1.0,0.0,0.0,1.0)))
+    X = rand(coxprocess(gp, exp, Box(Point(0.0,0.0), Point(100,100)), 100))
+    Y = rand(coxprocess(gp_tf, exp, Box(Point(0.0,0.0), Point(100,100)), 100))
+    @test X isa NamedTuple{(:points, :intensity), Tuple{NTuple{2,PointSet{2,Float64}}, Matrix{SVector{2,Float64}}}}
+    @test Y isa NamedTuple{(:points, :intensity, :latent), Tuple{NTuple{2,PointSet{2,Float64}}, Matrix{SVector{2,Float64}}, Matrix{SVector{2,Float64}}}}
+end

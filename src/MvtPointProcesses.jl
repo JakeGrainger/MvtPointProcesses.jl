@@ -1,8 +1,8 @@
 module MvtPointProcesses
 
-using Distributions, StaticArrays, CirculantEmbedding, LinearAlgebra
+using Distributions, StaticArrays , LinearAlgebra
 using Reexport
-@reexport using Meshes
+@reexport using Meshes, CirculantEmbedding
 import Base: rand
 import CirculantEmbedding: RandomField
 
