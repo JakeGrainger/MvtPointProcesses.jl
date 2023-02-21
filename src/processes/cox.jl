@@ -53,6 +53,6 @@ end
 
 function approximate_cov(c::CoxProcess{D,P,T,S,typeof(exp),G}, lags) where {D,P,T,S,G}
     cov_field = approx_cov(c.Λ, lags)
-    pp_mean = exp(cov_field[1]/2)
+    pp_mean = exp(mean(c.Λ) + cov_field[1]/2)
     return pp_mean^2 .* exp.(cov_field), pp_mean
 end
