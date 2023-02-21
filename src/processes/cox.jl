@@ -32,9 +32,9 @@ function Base.rand(c::CoxProcess)
 end
 
 striplatent(x) = x
-striplatent(x::NamedTuple{(:rf,:latent), T}) = x.rf
+striplatent(x::NamedTuple{(:rf,:latent), T}) where {T} = x.rf
 getlatent(x) = nothing
-getlatent(x::NamedTuple{(:rf,:latent), T}) = x.latent
+getlatent(x::NamedTuple{(:rf,:latent), T}) where {T} = x.latent
 
 process_fields(x, ::Nothing) = x
 process_fields(x, y) = (x..., latent=y)
