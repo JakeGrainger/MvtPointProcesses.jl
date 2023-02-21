@@ -28,7 +28,7 @@ coxprocess(fieldtype, link, geom::Geometry{D,T}, grid_res::Int=1000) where {D,T}
 
 function Base.rand(c::CoxProcess)
     intensity = Base.rand(c.Λ) # generate intensity field
-    return process_fields(_cox_rand(striplatent(intensity), c), getlatent(intensity))
+    return process_fields(_cox_rand(striplatent(intensity), c), intensity, c)
 end
 
 striplatent(x) = x
@@ -36,15 +36,15 @@ striplatent(x::NamedTuple{(:rf,:latent), T}) where {T} = x.rf
 getlatent(x) = nothing
 getlatent(x::NamedTuple{(:rf,:latent), T}) where {T} = x.latent
 
-process_fields(x, ::Nothing) = x
-process_fields(x, y) = (x..., latent=y)
+process_fields(x, y, c) = (points=x, intensity=c.link.(y))
+process_fields(x, y::NamedTuple{(:rf,:latent), T}, c) = (points=x, intensity=c.link(y.rf), latent=y.latent)
 
 _cox_rand(intensity::Array{SVector{P,T},D}, c::CoxProcess) where {P,D,T} = _cox_rand(ntuple(p->getindex.(intensity,p), Val{P}()), c)
 _cox_rand(intensity::NTuple{P,Array{T,D}}, c::CoxProcess) where {P,D,T} = _cox_rand.(intensity, Ref(c))
 function _cox_rand(intensity::Array{T,D}, c::CoxProcess) where {D,T}
     transformed_intensity = Intensity(IntensityGrid(c.link.(intensity), getmesh(c.Λ)))
     X = Base.rand(PoissonProcess(transformed_intensity, c.geom)) # generate inhomogeneous Poisson processes
-    return (X=X,intensity=transformed_intensity.ρ.ρ)
+    return X
 end
 
 function Distributions.mean(c::CoxProcess{D,P,T,S,typeof(exp),G}) where {D,P,T,S,G}
