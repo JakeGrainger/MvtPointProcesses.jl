@@ -1,18 +1,18 @@
 struct IntensityGrid{D,T1,T2}
-	ρ::Array{T1,D}
+	λ::Array{T1,D}
 	grid::CartesianGrid{D,T2}
-	function IntensityGrid(ρ::Array{T1,D}, grid::CartesianGrid{D,T2}) where {D,T1,T2}
-		@assert size(ρ) == size(grid)
-		new{D,T1,T2}(ρ, grid)
+	function IntensityGrid(λ::Array{T1,D}, grid::CartesianGrid{D,T2}) where {D,T1,T2}
+		@assert size(λ) == size(grid)
+		new{D,T1,T2}(λ, grid)
 	end
 end
 struct Intensity{T<:Real,F<:Union{Function,IntensityGrid}}
-	ρ::F
-	ρ₀::T
+	λ::F
+	λ₀::T
 end
 
 struct PoissonProcess{D,T,S<:Union{Real,Intensity},G<:Geometry{D,T}} <: PointProcess{D,1}
-	ρ::S
+	λ::S
 	geom::G
 end
 
@@ -22,25 +22,25 @@ function (g::IntensityGrid)(ξ)
     gn = g.grid.topology.dims
 	all(gmin.≤ ξ.coords .≤gmin.+gΔ.*gn) || error("point is not in domain of intensity grid.")
     ind = CartesianIndex(Tuple(min.(floor.(Int, (ξ.coords.-gmin)./gΔ).+1, gn) ))
-    return g.ρ[ind]
+    return g.λ[ind]
 end
-Intensity(ρ::IntensityGrid) = Intensity(ρ, maximum(ρ))
-Intensity(ρ::Function, mesh::Mesh) = maximum(ρ(centroid(m)) for m in mesh)
+Intensity(λ::IntensityGrid) = Intensity(λ, maximum(λ))
+Intensity(λ::Function, mesh::Mesh) = maximum(λ(centroid(m)) for m in mesh)
 
-Base.maximum(g::IntensityGrid) = Base.maximum(g.ρ)
+Base.maximum(g::IntensityGrid) = Base.maximum(g.λ)
 
 function rand(p::PoissonProcess{D,T,<:Real,<:Geometry{D,T}}) where {D,T}
 	grid = boundingbox(p.geom)
-	N = rand(Poisson(p.ρ * measure(grid)))
+	N = rand(Poisson(p.λ * measure(grid)))
 	U = ntuple(d-> Uniform(minimum(grid).coords[d], maximum(grid).coords[d]), Val{D}())
 	X = PointSet([Point(rand.(U)) for _ in 1:N])
 	return mask(X,p.geom)
 end
 
 function rand(p::PoissonProcess{D,T,<:Intensity,<:Geometry}) where {D,T}
-	X = Base.rand(PoissonProcess(p.ρ.ρ₀, p.geom))
-	thin(X, ξ->p.ρ.ρ(ξ)/p.ρ.ρ₀)
+	X = Base.rand(PoissonProcess(p.λ.λ₀, p.geom))
+	thin(X, ξ->p.λ.λ(ξ)/p.λ.λ₀)
 end
 
-sdf(p::PoissonProcess{Real,Geometry},freq) = p.λ
-sdf(p::PoissonProcess{Intensity,Geometry},freq) = error("Process is not stationary, so sdf not defined.")
+sdf(p::PoissonProcess{D,T,<:Real,<:Geometry},freq) where {D,T} = p.λ
+sdf(p::PoissonProcess{D,T,<:Intensity,Geometry},freq) where {D,T} = error("Process is not stationary, so sdf not defined.")
