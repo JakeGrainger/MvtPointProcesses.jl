@@ -1,3 +1,15 @@
+"""
+    MaternIIProcess
+
+A Matern hard core process of type II.
+Generates a marked proposal process with intensity `κ` and marks with iid Unif(0,1).
+Points are included if they have the largest mark of all points within a radius `r` of the point in question.
+
+# Parameters
+- `κ`: The intensity of the proposal locations.
+- `r`: The repulsion radius.
+- `geom`: The geometry on which we wish to sample the process.
+"""
 struct MaternIIProcess{D,T,T1<:Real,T2<:Real,G<:Geometry{D,T}} <: PointProcess{D,1}
 	κ::T1
     r::T2
