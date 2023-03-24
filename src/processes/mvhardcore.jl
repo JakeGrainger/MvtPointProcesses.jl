@@ -1,3 +1,15 @@
+"""
+    MultivariateHardCoreProcess{D,P,...}
+
+Produces a multivariate hard core process with `P` processes.
+The convention is that the first process supresses the remainder.
+
+# parameters
+- `rho_r`: The intensity of the first process.
+- `rho_c`: The intensity of the remaining processes, either `NTuple{P-1,Real}` of `Real`.
+- `r`: The inihibition radius.
+- `geom`: The geometry.
+"""
 struct MultivariateHardCoreProcess{D,P,T1,T2,T3,S,G<:Geometry{D,S}} <: PointProcess{D,P}
     rho_r::T1
     rho_c::T2
