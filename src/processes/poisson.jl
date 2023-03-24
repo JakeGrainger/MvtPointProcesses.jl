@@ -11,6 +11,12 @@ struct Intensity{T<:Real,F<:Union{Function,IntensityGrid}}
 	λ₀::T
 end
 
+"""
+	PoissonProcess(λ, geom)
+
+A Poisson process with intensity λ to be sampled on geometry `geom`.
+The intensity can be `Real`, in which case the process is stationary, or `Intensity`.
+"""
 struct PoissonProcess{D,T,S<:Union{Real,Intensity},G<:Geometry{D,T}} <: PointProcess{D,1}
 	λ::S
 	geom::G
