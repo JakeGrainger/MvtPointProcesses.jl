@@ -1,3 +1,14 @@
+"""
+    MaternIProcess(κ, r, geom)
+A Matern hard core process of type I.
+Proposal points from a poisson process are first generated with intensity `κ`.
+Each point is included in the final process if no other point lies within a distance of `r` of the point in question.
+
+# Parameters
+- `κ`: The intensity of the proposal locations.
+- `r`: The repulsion radius.
+- `geom`: The geometry on which we wish to sample the process.
+"""    
 struct MaternIProcess{D,T,T1<:Real,T2<:Real,G<:Geometry{D,T}} <: PointProcess{D,1}
 	κ::T1
     r::T2
