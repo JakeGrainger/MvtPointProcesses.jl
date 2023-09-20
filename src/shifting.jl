@@ -3,7 +3,7 @@ struct ShiftedProcess{D,P,M<:PointProcess{D,P},T<:NTuple{P,NTuple{D,Real}}} <: P
     shift::T
 end
 shift(p::PointProcess, s) = ShiftedProcess(p, s)
-shift(p::PointSet{D,<:Real}, s::NTuple{D,Real}) where {D} = PointSet([Point(x.coords .+ s) for x in p.items])
+shift(p::PointSet{D,<:Real}, s::NTuple{D,Real}) where {D} = PointSet([Point(x.coords .+ s) for x in parent(p)])
 
 rand(p::ShiftedProcess{D,1}) where {D} = rand(p)
 function rand(p::ShiftedProcess{D,P}) where {D,P}

@@ -39,8 +39,8 @@ Inhibits Y based on X with radius r.
 """
 function inhibit(Y::PointSet,X::PointSet,r::Real)
     Y_inhib = eltype(Y)[]
-    for y in Y.items
-        if !any(norm(x.coords .- y.coords) < r for x in X.items)
+    for y in parent(Y)
+        if !any(norm(x.coords .- y.coords) < r for x in parent(X))
             push!(Y_inhib, y)
         end
     end
